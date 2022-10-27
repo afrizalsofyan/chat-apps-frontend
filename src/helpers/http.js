@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const http = () => {
     const headers = {}
-    const {token} = JSON.parse(localStorage.getItem('chat-apps'))
+    const token = localStorage.getItem('chat-apps-auth-token')
     if(token) {
         headers.authorization = `Bearer ${token}`
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import http from '../helpers/http'
 

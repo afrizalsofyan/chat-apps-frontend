@@ -13,13 +13,16 @@ function Login() {
   const onSubmit = async (e) => {
     e.preventDefault()
     if(validation()) {
-      const {data} = await http().post('/login', {...values})
-      if(data.success === false) {
-        toast.error('Something wrong, ', data.message)
-      } else {
-        localStorage.setItem('chat-apps', JSON.stringify(data.results))
+      try {
+        const {data} = await http().post('/login', {...values})
+        localStorage.setItem('chat-apps-auth-token', data.results.token)
+        navigation('/home')
+      } catch (error) {
+        console.log(error)
+        if(error && error.response?.data.success === false) {
+          toast.error('Something wrong\n'+ error.response.data.message)
+        }
       }
-      navigation('/home')
     }
   }
   const handleChange = (e) => {
