@@ -5,7 +5,9 @@
 .contact-list::-webkit-scrollbar{
   /* display: none; */
   width: 0.2rem;
+  background-color: rgb(55, 58, 63);
 }
 .contact-list::-webkit-scrollbar-thumb{
-  background-color: gray;
+  background-color: grey;
+  border-radius: 100px;
 }

@@ -4,12 +4,15 @@ import CardChat from '../components/CardChat'
 import http from '../helpers/http'
 import {IoSearch} from 'react-icons/io5'
 import { BiCog } from 'react-icons/bi'
+import ChatRoomLayout from '../components/ChatRoomLayout'
 
 function Home() {
   const navigation = useNavigate()
   const [users, setUsers] = React.useState([])
   const [currentUser, setCurentUser] = React.useState()
   const [loading, setLoading] = React.useState(false)
+  const [indexChatUser, setIndexChatUser] = React.useState()
+
   const getCurrentUser = async () => {
     try {
       const {data} = await http().get('/currentUser')
@@ -48,17 +51,23 @@ function Home() {
       console.log(error.response.data.message)
     }
   }
+
+  const handleClickChat = (e, idx) => {
+    console.log(e, idx)
+    setIndexChatUser(idx)
+  }
+  
   React.useEffect(() => {
     if(currentUser!==undefined){
       getAllUsers()
     }
   }, [currentUser])
-  console.log(currentUser)
+  
   return (
     // <button onClick={getCurrentUser}>get data</button>
     <>
       <section className='w-full min-h-screen bg-gray-900 flex flex-col items-center justify-center'>
-        <div className="text-white grid grid-cols-3 w-full container h-[86vh]">
+        <div className="text-white grid grid-cols-3 w-full container py-10 min-h-screen">
           <div className='py-5 bg-gray-700 rounded-tl-lg rounded-bl-lg w-full'>
             <div className='flex flex-col'>
               {!loading ? (
@@ -68,8 +77,8 @@ function Home() {
                       <span className='text-base font-semibold'>All Your chats</span>
                       <IoSearch size={20} />
                     </div>
-                    <div className='pb-5 h-96 overflow-auto contact-list' onScroll={handleScroll}>
-                      <CardChat data={users} />
+                    <div className='pb-2 h-[60vh] overflow-auto contact-list' onScroll={handleScroll}>
+                      <CardChat data={users} onClickChat={handleClickChat} indexActive={indexChatUser} />
                     </div>
                   </div>
                   <div className='flex justify-between items-center px-5 h-50 pt-5'>
@@ -81,14 +90,16 @@ function Home() {
                   </div>
                 </>
               ) : (
-                <div className="flex flex-col items-center justify-center h-[60vh]">
+                <div className="flex flex-col items-center justify-center">
                   <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
                   <span>Loading</span>
                 </div>
               )}
             </div>
           </div>
-          <div className='p-5 col-span-2 bg-gray-800 rounded-tr-lg rounded-br-lg'>2</div>
+          <div className='p-5 col-span-2 bg-gray-800 rounded-tr-lg rounded-br-lg'>
+            <ChatRoomLayout/>
+          </div>
         </div>
       </section>
     </>
