@@ -18,19 +18,21 @@ function EditProfile() {
     }
     setLoading(true)
     try {
-      const localStore = {}
+      // const localStore = {}
       const {data} = await http().post('/avatar-profile', {
         userPicture: picture[pict]
       })
-      if(data?.results?.isPictureSet) {
-        localStore.isAvatar = data?.results?.isPictureSet
-        localStore.picture=data?.results?.userPicture
-        localStorage.setItem('chat-apps-user-data', JSON.stringify(localStore))
+      console.log(data)
+      console.log(data.results)
+      console.log(data.results.isPictureSet)
+      if(data.results.isPictureSet) {
+        // localStore.isAvatar = data.results.isPictureSet
+        // localStore.picture = data.results.userPicture
+        // localStorage.setItem('chat-apps-user-data', JSON.stringify(localStore))
         navigation('/home')
       } else {
         toast.error('error to set avatar. try again')
       }
-      console.log(data)
     } catch (error) {
       console.log(error)
     }

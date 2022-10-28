@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.contact-list::-webkit-scrollbar{
+  /* display: none; */
+  width: 0.2rem;
+}
+.contact-list::-webkit-scrollbar-thumb{
+  background-color: gray;
+}
