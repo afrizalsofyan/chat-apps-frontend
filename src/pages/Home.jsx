@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CardChat from '../components/CardChat'
 import http from '../helpers/http'
 import {IoSearch} from 'react-icons/io5'
@@ -12,6 +12,8 @@ function Home() {
   const [currentUser, setCurentUser] = React.useState()
   const [loading, setLoading] = React.useState(false)
   const [indexChatUser, setIndexChatUser] = React.useState()
+  const [selectedUser, setSelectedUser] = React.useState()
+  const [showModal, setShowModal] = React.useState(false)
 
   const getCurrentUser = async () => {
     try {
@@ -52,11 +54,16 @@ function Home() {
     }
   }
 
-  const handleClickChat = (e, idx) => {
-    console.log(e, idx)
+  const handleClickChat = (user, idx) => {
+    setSelectedUser(user)
     setIndexChatUser(idx)
   }
   
+  const onLogout = async() => {
+    localStorage.removeItem('chat-apps-auth-token')
+    navigation('/login')
+  }
+
   React.useEffect(() => {
     if(currentUser!==undefined){
       getAllUsers()
@@ -81,12 +88,20 @@ function Home() {
                       <CardChat data={users} onClickChat={handleClickChat} indexActive={indexChatUser} />
                     </div>
                   </div>
-                  <div className='flex justify-between items-center px-5 h-50 pt-5'>
+                  <div className='flex justify-between items-center px-5 h-50 pt-5 w-full'>
                     <div className='flex gap-4 items-center'>
-                      <img src={`data:image/svg+xml;base64,${currentUser?.picture}`} className='w-14' alt={`img ${currentUser?.username}`} />
+                      {currentUser?<img src={`data:image/svg+xml;base64,${currentUser?.picture}`} className='w-14' alt={`img ${currentUser?.username}`} /> : null}
                       <span className='text-base font-semibold'>{currentUser?.username}</span>
+                      {showModal ? (
+                        <div className='absolute bg-white text-teal-800 w-1/6 ml-16 mb-28 lg:w-1/5 py-3 lg:ml-24 lg:mb-28 xl:ml-28 rounded-md'>
+                          <div className='flex flex-col items-start justify-center gap-2'>
+                            <Link to={'#'} className='pl-3 font-semibold text-sm hover:text-teal-600'>My Account</Link>
+                            <span className='pl-3 font-semibold text-sm hover:text-teal-600 cursor-pointer' onClick={onLogout}>Logout</span>
+                          </div>
+                      </div>
+                      ) : null}
                     </div>
-                    <BiCog size={25}/>
+                    <BiCog size={25} className='hover:transition hover:rotate-180 cursor-pointer before:-rotate-180' onClick={()=>setShowModal(!showModal)}/>
                   </div>
                 </>
               ) : (
@@ -97,8 +112,10 @@ function Home() {
               )}
             </div>
           </div>
-          <div className='p-5 col-span-2 bg-gray-800 rounded-tr-lg rounded-br-lg'>
-            <ChatRoomLayout/>
+          <div className={`col-span-2 bg-gray-800 rounded-tr-lg rounded-br-lg ${indexChatUser < 0 ? 'flex flex-col justify-center items-center' : ''}`}>
+            <ChatRoomLayout currentUserData={currentUser} userData={selectedUser}/>
+            {/* <div className=''>
+            </div> */}
           </div>
         </div>
       </section>

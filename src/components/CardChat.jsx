@@ -4,7 +4,7 @@ import { BiUserCircle } from 'react-icons/bi'
 function CardChat({data, onClickChat, indexActive}) {
   return (
     <>
-      {data && data.map((e, idx) => {
+      {data && data?.map((e, idx) => {
         return (
           <div key={'key users '+idx} className={`flex py-3 px-5 justify-between pb-5 border-b border-white/25 cursor-pointer hover:bg-gray-600 ${indexActive === idx ? 'bg-gray-600' : ''}`} onClick={()=>onClickChat(e, idx)}>
             <div className='flex gap-3 h-full w-3/4'>
