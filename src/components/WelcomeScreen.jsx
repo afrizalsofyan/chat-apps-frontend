@@ -8,7 +8,7 @@ function WelcomeScreen({currentUserData}) {
       {currentUserData ? 
         (
           <span className='text-center text-xl font-bold'>Hi
-            <span className='text-yellow-500'>{` ${currentUserData?.username}`}<br/></span>
+            <span className='text-yellow-500'>{`, ${currentUserData?.username} :)`}<br/></span>
             <span className='text-base font-light'>Please choose user for the starting message.</span>
           </span>
         ) : null 

@@ -5,9 +5,11 @@ import http from '../helpers/http'
 import {IoSearch} from 'react-icons/io5'
 import { BiCog } from 'react-icons/bi'
 import ChatRoomLayout from '../components/ChatRoomLayout'
+import {io} from 'socket.io-client'
 
 function Home() {
   const navigation = useNavigate()
+  const socket = React.useRef()
   const [users, setUsers] = React.useState([])
   const [currentUser, setCurentUser] = React.useState()
   const [loading, setLoading] = React.useState(false)
@@ -69,7 +71,12 @@ function Home() {
       getAllUsers()
     }
   }, [currentUser])
-  
+  React.useEffect(()=>{
+    if(currentUser){
+      socket.current = io('http://localhost:4000')
+      socket.current.emit('add-user', currentUser.id)
+    }
+  },[currentUser])
   return (
     // <button onClick={getCurrentUser}>get data</button>
     <>
@@ -113,7 +120,7 @@ function Home() {
             </div>
           </div>
           <div className={`col-span-2 bg-gray-800 rounded-tr-lg rounded-br-lg ${indexChatUser < 0 ? 'flex flex-col justify-center items-center' : ''}`}>
-            <ChatRoomLayout currentUserData={currentUser} userData={selectedUser}/>
+            <ChatRoomLayout currentUserData={currentUser} userData={selectedUser} socket={socket}/>
             {/* <div className=''>
             </div> */}
           </div>
